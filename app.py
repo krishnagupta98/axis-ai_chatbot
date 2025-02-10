@@ -1,11 +1,9 @@
 from flask import Flask, render_template, request, jsonify, session
 import requests
 import os
-from dotenv import load_dotenv
 
-# Load API key from .env file
-load_dotenv()
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+# API Key
+OPENROUTER_API_KEY = "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"
 
 # API Settings
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -16,7 +14,7 @@ HEADERS = {
 
 # Flask App
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "your_default_secret_key")
+app.secret_key = "your_default_secret_key"  # Replace with your own secret key
 
 # Load Knowledge Base (Custom Data)
 def load_knowledge_base():
