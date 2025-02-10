@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot - Axis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div id="splash-screen">
+        <h1>Axis</h1>
+        <p>Empowering Knowledge, Inspiring Futures</p>
+    </div>
+
+    <div id="chat-container" style="display: none;">
+        <div class="chat-header">
+            <h2>Chat with AI</h2>
+        </div>
+        <div id="chat-box"></div>
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Type a message..." aria-label="User  message input">
+            <button onclick="sendMessage()" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <p id="response" class="response-text"></p>
+    </div>
+
+    <script>
+        // Show chat container after splash screen
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById("splash-screen").style.display = "none";
+                document.getElementById("chat-container").style.display = "block";
+            }, 3000); // 3 seconds
+        };
+
+        async function sendMessage() {
+            let message = document.getElementById("userInput").value;
+            let chatBox = document.getElementById("chat-box");
+
+            // Display user message
+            if (message.trim() === "") return; // Prevent sending empty messages
+            chatBox.innerHTML += `<div class="user-message">${message}</div>`;
+            document.getElementById("userInput").value = ''; // Clear input
+
+            let response = await fetch("/chat", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({"message": message})
+            });
+
+            let data = await response.json();
+            chatBox.innerHTML += `<div class="ai-message">${data.reply}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+        }
+    </script>
+</body>
+</html>
